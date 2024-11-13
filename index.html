@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightWave - Advanced Engagement Analysis</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        /* ... other CSS styles ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        </div>
+
+    <script>
+        // JavaScript code
+        const supportedFormats = ['audio/mpeg', 'audio/wav', 'audio/mp4'];
+
+        function startAnalysis() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file || !supportedFormats.includes(file.type)) {
+                alert('Please upload a valid audio file (MP3, WAV, or MP4)');
+                return;
+            }
+
+            // Simulate analysis (replace with actual audio processing)
+            const progressBar = document.getElementById('progressBarAnalysis');
+            progressBar.style.width = '0%';
+            const interval = setInterval(() => {
+                progressBar.style.width = `${Math.min(progressBar.style.width, 100)}%`;
+            }, 20);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                // ... your analysis logic here ...
+                updateChart();
+                updateResults();
+            }, 5000); // Adjust duration as needed
+        }
+
+        // ... other JavaScript functions ...
+
+        // Chart.js example
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                // ... chart options ...
+            }
+        });
+    </script>
+</body>
+</html>
