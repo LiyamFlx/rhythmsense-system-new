@@ -17,55 +17,100 @@
 </head>
 <body>
     <div class="container">
-        </div>
+        <header>
+            <h1>InsightWave</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Login</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div id="startScreen" class="screen">
+                <h2>Welcome to InsightWave</h2>
+                <p>Analyze your audio content and gain valuable insights.</p>
+                <input type="file" id="fileInput" accept=".mp3,.wav,.mp4">
+                <button class="button start">Start Analysis</button>
+            </div>
+
+            <div id="analysisScreen" class="screen" style="display: none;">
+                <h2>Real-Time Analysis</h2>
+                <p>Analyzing your audio...</p>
+                <div class="progress-bar-container">
+                    <div id="progressBarAnalysis" class="progress-bar"></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+
+            <div id="resultsScreen" class="screen" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div class="results-breakdown">
+                    <h3>Overall Engagement Score</h3>
+                    <p id="engagementScore">0%</p>
+                </div>
+                <div class="chart-container">
+                    </div>
+                <button class="button download">Download Report</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 InsightWave. All rights reserved.</p>
+        </footer>
+    </div>
 
     <script>
-        // JavaScript code
-        const supportedFormats = ['audio/mpeg', 'audio/wav', 'audio/mp4'];
+        // ... JavaScript code ...
 
         function startAnalysis() {
-            const file = document.getElementById('fileInput').files[0];
-            if (!file || !supportedFormats.includes(file.type)) {
-                alert('Please upload a valid audio file (MP3, WAV, or MP4)');
-                return;
-            }
+            // ... file validation and error handling ...
 
             // Simulate analysis (replace with actual audio processing)
             const progressBar = document.getElementById('progressBarAnalysis');
-            progressBar.style.width = '0%';
+            let progress = 0;
             const interval = setInterval(() => {
-                progressBar.style.width = `${Math.min(progressBar.style.width, 100)}%`;
-            }, 20);
-
-            setTimeout(() => {
-                clearInterval(interval);
-                progressBar.style.width = '100%';
-                // ... your analysis logic here ...
-                updateChart();
-                updateResults();
-            }, 5000); // Adjust duration as needed
+                progress += 10;
+                progressBar.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // ... your actual analysis logic here ...
+                    updateChart();
+                    updateResults();
+                }
+            }, 500);
         }
 
-        // ... other JavaScript functions ...
+        function updateChart() {
+            // ... chart generation logic using Chart.js or other libraries ...
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    // ... chart options ...
+                }
+            });
+        }
 
-        // Chart.js example
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                // ... chart options ...
-            }
-        });
+        function updateResults() {
+            // Calculate engagement score and update the UI
+            const engagementScore = 85; // Replace with actual calculated score
+            document.getElementById('engagementScore').textContent = `${engagementScore}%`;
+        }
     </script>
 </body>
 </html>
