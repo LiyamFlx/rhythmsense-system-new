@@ -1,116 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightWave - Advanced Engagement Analysis</title>
-    <style>
-        /* Your CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-        /* ... other CSS styles ... */
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EngageSense - Full Functionality</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #6E55BB;
+      --blue: #26A6FF;
+      --green: #1DB954;
+      --black: #121212;
+      --dark-grey: #1E1E1E;
+      --white: #FFFFFF;
+      --grey: #9E9E9E;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background-color: var(--black);
+      color: var(--white);
+      text-align: center;
+    }
+
+    header {
+      background: linear-gradient(to right, var(--purple), var(--blue));
+      padding: 20px 0;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: var(--white);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background-color: var(--dark-grey);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--blue);
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: var(--green);
+      color: var(--black);
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1ab844;
+    }
+
+    .chart-container {
+      margin: 20px 0;
+    }
+
+    #waveform {
+      margin: 20px 0;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: var(--black);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .modal-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      font-size: 1.2rem;
+    }
+
+    .close-button {
+      color: var(--white);
+      font-size: 1.5rem;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 20px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>InsightWave</h1>
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Login</a></li>
-                </ul>
-            </nav>
-        </header>
+  <header>
+    <h1>EngageSense</h1>
+    <p>Real-Time Engagement Tracking & Analytics</p>
+  </header>
 
-        <main>
-            <div id="startScreen" class="screen">
-                <h2>Welcome to InsightWave</h2>
-                <p>Analyze your audio content and gain valuable insights.</p>
-                <input type="file" id="fileInput" accept=".mp3,.wav,.mp4">
-                <button class="button start">Start Analysis</button>
-            </div>
-
-            <div id="analysisScreen" class="screen" style="display: none;">
-                <h2>Real-Time Analysis</h2>
-                <p>Analyzing your audio...</p>
-                <div class="progress-bar-container">
-                    <div id="progressBarAnalysis" class="progress-bar"></div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="myChart"></canvas>
-                </div>
-            </div>
-
-            <div id="resultsScreen" class="screen" style="display: none;">
-                <h2>Analysis Results</h2>
-                <div class="results-breakdown">
-                    <h3>Overall Engagement Score</h3>
-                    <p id="engagementScore">0%</p>
-                </div>
-                <div class="chart-container">
-                    </div>
-                <button class="button download">Download Report</button>
-            </div>
-        </main>
-
-        <footer>
-            <p>&copy; 2024 InsightWave. All rights reserved.</p>
-        </footer>
+  <div class="container">
+    <!-- Section: Buttons -->
+    <div class="section">
+      <h2>Controls</h2>
+      <div class="button-row">
+        <button id="startTracking">Start Tracking</button>
+        <button id="stopTracking">Stop Tracking</button>
+        <button id="playAudio">Play</button>
+        <button id="pauseAudio">Pause</button>
+        <button id="recordAudio">Record</button>
+        <button id="uploadAudio">Upload</button>
+        <button id="downloadData">Download Data</button>
+        <button id="exportInsights">Export Insights</button>
+      </div>
     </div>
 
-    <script>
-        // ... JavaScript code ...
+    <!-- Section: Dynamic Recommendations -->
+    <div class="section">
+      <h2>Dynamic Recommendations</h2>
+      <div class="recommendation-card">
+        <ul id="recommendationList"></ul>
+      </div>
+    </div>
 
-        function startAnalysis() {
-            // ... file validation and error handling ...
+    <!-- Section: Engagement Charts -->
+    <div class="section">
+      <h2>Engagement Trends</h2>
+      <div class="chart-container">
+        <canvas id="engagementChart"></canvas>
+      </div>
+    </div>
 
-            // Simulate analysis (replace with actual audio processing)
-            const progressBar = document.getElementById('progressBarAnalysis');
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                progressBar.style.width = `${progress}%`;
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    // ... your actual analysis logic here ...
-                    updateChart();
-                    updateResults();
-                }
-            }, 500);
-        }
+    <!-- Section: Waveform Visualization -->
+    <div class="section">
+      <h2>Waveform Visualization</h2>
+      <div id="waveform"></div>
+    </div>
 
-        function updateChart() {
-            // ... chart generation logic using Chart.js or other libraries ...
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: 'My First Dataset',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    // ... chart options ...
-                }
-            });
-        }
+    <!-- Modal for Drill-Down Insights -->
+    <div id="insightModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h3>Drill-Down Insight</h3>
+        <p id="insightDetails"></p>
+      </div>
+    </div>
+  </div>
 
-        function updateResults() {
-            // Calculate engagement score and update the UI
-            const engagementScore = 85; // Replace with actual calculated score
-            document.getElementById('engagementScore').textContent = `${engagementScore}%`;
-        }
-    </script>
+  <script>
+    // Buttons
+    document.getElementById("startTracking").addEventListener("click", () => {
+      alert("Tracking Started");
+    });
+
+    document.getElementById("stopTracking").addEventListener("click", () => {
+      alert("Tracking Stopped");
+    });
+
+    document.getElementById("playAudio").addEventListener("click", () => {
+      wavesurfer.play();
+    });
+
+    document.getElementById("pauseAudio").addEventListener("click", () => {
+      wavesurfer.pause();
+    });
+
+    document.getElementById("recordAudio").addEventListener("click", () => {
+      alert("Recording Started");
+    });
+
+    document.getElementById("uploadAudio").addEventListener("click", () => {
+      alert("Audio Uploaded");
+    });
+
+    document.getElementById("downloadData").addEventListener("click", () => {
+      alert("Data Downloaded");
+    });
+
+    document.getElementById("exportInsights").addEventListener("click", () => {
+      alert("Insights Exported");
+    });
+
+    // Recommendations
+    function updateRecommendations(physical, mental, spiritual) {
+      const recommendations = [];
+      if (physical < 50) recommendations.push("Boost physical engagement with activities.");
+      if (mental < 50) recommendations.push("Enhance mental engagement with challenges.");
+      if (spiritual < 50) recommendations.push("Inspire audience spiritually.");
+      const list = document.getElementById("recommendationList");
+      list.innerHTML = recommendations.map(r => `<li>${r}</li>`).join("");
+    }
+    updateRecommendations(40, 50, 60);
+
+    // Chart.js Engagement Trends
+    const ctx = document.getElementById("engagementChart").getContext("2d");
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["10s", "20s", "30s", "40s"],
+        datasets: [
+          { label: "Physical", data: [40, 50, 60, 80], borderColor: "#6E55BB", fill: false },
+          { label: "Mental", data: [50, 60, 70, 90], borderColor: "#26A6FF", fill: false },
+        ],
+      },
+    });
+
+    // Waveform Visualization
+    const wavesurfer = WaveSurfer.create({ container: "#waveform", waveColor: "violet", progressColor: "purple" });
+    wavesurfer.load("your-audio-file.mp3");
+
+    // Modal for Drill-Down
+    function openModal(content) {
+      const modal = document.getElementById("insightModal");
+      document.getElementById("insightDetails").textContent = content;
+      modal.style.display = "flex";
+    }
+    function closeModal() {
+      document.getElementById("insightModal").style.display = "none";
+    }
+  </script>
 </body>
 </html>
